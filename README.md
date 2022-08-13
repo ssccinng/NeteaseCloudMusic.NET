@@ -1,1 +1,3 @@
 # NeteasyCloudMusic.NET
+
+参考自https://github.com/Binaryify/NeteaseCloudMusicApi 施工中...

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NeteasyCloudMusic.NET.Models
+namespace NeteaseCloudMusic.NET
 {
-    public class MusicInfo
+    public partial class NeteasyCloudClient
     {
+        
     }
 }

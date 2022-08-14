@@ -1,4 +1,4 @@
-namespace NeteasyCloudMusic.NET.Interfaces;
+namespace NeteaseCloudMusic.NET.Interfaces;
 
 public interface IRequestBaseConfig
 {

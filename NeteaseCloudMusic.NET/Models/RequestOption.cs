@@ -1,4 +1,4 @@
-namespace NeteasyCloudMusic.NET.Models;
+namespace NeteaseCloudMusic.NET.Models;
 
 public class RequestOption
 {

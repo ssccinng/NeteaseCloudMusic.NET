@@ -1,4 +1,4 @@
-namespace NeteasyCloudMusic.NET;
+namespace NeteaseCloudMusic.NET;
 
 public class PlaylistAPI
 {

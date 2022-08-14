@@ -2,9 +2,12 @@ using System.IO.Compression;
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using NeteasyCloudMusic.NET.Models;
+using NeteaseCloudMusic.NET.Models;
+using NeteaseCloudMusic.NET.Utils;
+using static System.Text.Json.JsonSerializer;
 
-namespace NeteasyCloudMusic.NET;
+namespace NeteaseCloudMusic.NET;
+
 
 public partial class NeteasyCloudClient
 {
@@ -28,7 +31,13 @@ public partial class NeteasyCloudClient
             _neteasyClient.DefaultRequestHeaders.Add(data[0].Trim(), data[1].Trim());
         }
     }
-
+    /// <summary>
+    /// 整合请求数据
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="method"></param>
+    /// <param name="data"></param>
+    /// <param name="requestOption"></param>
     public async Task RequestAsync(string url, HttpMethod method, object data, 
         RequestOption requestOption)
     {
@@ -40,6 +49,10 @@ public partial class NeteasyCloudClient
         switch (requestOption.Crypto)
         {
             case CryptoType.Weapi:
+                // 加密后的数据
+                var eData = 
+                    Encrypt.EncryptedRequestWeapi(Serialize(data));
+                httpRequestMessage.Content = new FormUrlEncodedContent(eData);
                 break;
             case CryptoType.Eapi:
                 break;
@@ -51,23 +64,24 @@ public partial class NeteasyCloudClient
 
         await _neteasyClient.SendAsync(httpRequestMessage);
     }
+    
     public static string DecompressionGzip(string input)
     {
-        return String.Empty;
+        return DecompressionGzip(new MemoryStream(Encoding.UTF8.GetBytes(input)));
     }
+    /// <summary>
+    /// 解压GZip流
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
     public static string DecompressionGzip(Stream input)
     {
         using GZipStream gZipStream = new GZipStream(input, CompressionMode.Decompress);
         using var resultStream = new MemoryStream();
         gZipStream.CopyTo(resultStream);
         return Encoding.UTF8.GetString(resultStream.ToArray());
-        // using (var resultStream = new MemoryStream())
-        // {
-        //     gZipStream.CopyTo(resultStream);
-        //     // var gfata = Encoding.UTF8.GetString(resultStream.ToArray());
-        //     // var data1 = JsonDocument.Parse(gfata).RootElement;
-        //     // return data1.GetProperty("data").GetProperty("user").GetProperty("result").GetProperty("rest_id").GetString();
-        //     return Encoding.UTF8.GetString(resultStream.ToArray());
-        // }
     }
+    
+    
+    
 }

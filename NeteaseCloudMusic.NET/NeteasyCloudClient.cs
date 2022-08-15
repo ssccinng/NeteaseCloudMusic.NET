@@ -2,6 +2,7 @@ using System.IO.Compression;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using NeteaseCloudMusic.NET.Models;
 using NeteaseCloudMusic.NET.Utils;
 using static System.Text.Json.JsonSerializer;
@@ -38,7 +39,7 @@ public partial class NeteasyCloudClient
     /// <param name="method"></param>
     /// <param name="data"></param>
     /// <param name="requestOption"></param>
-    public async Task RequestAsync(string url, HttpMethod method, object data, 
+    public async Task RequestAsync(string url, HttpMethod method, RequestData data, 
         RequestOption requestOption)
     {
         HttpRequestMessage httpRequestMessage = new HttpRequestMessage
@@ -66,15 +67,22 @@ public partial class NeteasyCloudClient
         switch (requestOption.Crypto)
         {
             case CryptoType.Weapi:
+                if (cookie != null)
+                {
+                    var match = Regex.Match(cookie.First(), "/_csrf=([^(;|$)]+)/");
+                    if (match.Success)
+                    {
+                        // data加个字段
+                        data.Csrf = match.Groups[1].Value;
+                    }
+                }
+            
                 // 加密后的数据
                 var eData = 
                     Encrypt.EncryptedRequestWeapi(Serialize(data));
                 // 需要提取csrf
                 
-                if ()
-                {
-                    
-                }
+                
                 
                 httpRequestMessage.Content = new FormUrlEncodedContent(eData);
                 break;

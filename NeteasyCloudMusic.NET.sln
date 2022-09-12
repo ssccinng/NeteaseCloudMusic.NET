@@ -5,6 +5,8 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeteaseCloudMusic.NET", "NeteaseCloudMusic.NET\NeteaseCloudMusic.NET.csproj", "{46BFD847-C947-41C5-85A8-E5CD641CCD28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeteasyCloudMusic.Demo", "NeteasyCloudMusic.Demo\NeteasyCloudMusic.Demo.csproj", "{C422563C-7B8B-4586-A58D-B2AB578ABC08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{46BFD847-C947-41C5-85A8-E5CD641CCD28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46BFD847-C947-41C5-85A8-E5CD641CCD28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46BFD847-C947-41C5-85A8-E5CD641CCD28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C422563C-7B8B-4586-A58D-B2AB578ABC08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C422563C-7B8B-4586-A58D-B2AB578ABC08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C422563C-7B8B-4586-A58D-B2AB578ABC08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C422563C-7B8B-4586-A58D-B2AB578ABC08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

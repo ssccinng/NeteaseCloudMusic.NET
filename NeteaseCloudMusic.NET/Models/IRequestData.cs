@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NeteaseCloudMusic.NET.Models
 {
-    public class RequestData
+    public class NeteaseRequestData
     {
 
         [JsonPropertyName("csrf")]

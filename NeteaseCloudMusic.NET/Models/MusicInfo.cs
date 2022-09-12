@@ -8,5 +8,9 @@ namespace NeteaseCloudMusic.NET.Models
 {
     public class MusicInfo
     {
+        public string Url { get; set; }
+        public string Name { get; set; }
+    
+        public long Id { get; set; }
     }
 }

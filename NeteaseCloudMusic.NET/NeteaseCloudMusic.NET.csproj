@@ -12,4 +12,19 @@
     <Folder Include="API\User" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="NeteaseMusicResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>NeteaseMusicResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="NeteaseMusicResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>NeteaseMusicResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

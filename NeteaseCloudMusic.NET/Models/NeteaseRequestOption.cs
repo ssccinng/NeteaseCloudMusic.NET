@@ -22,8 +22,10 @@ public class RequestOption
     /// 代理
     /// </summary>
     public string? Proxy { get; set; }
-    
-    
+    /// <summary>
+    /// UserAgent类型
+    /// </summary>
+    public UAType UaType { get; set; }
 }
 
 public enum CryptoType
@@ -38,5 +40,6 @@ public enum UAType
 {
     PC,
     Mobile,
+    Unkown
     
 }

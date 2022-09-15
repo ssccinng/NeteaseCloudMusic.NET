@@ -53,24 +53,38 @@ namespace NeteaseCloudMusic.NET
             return Enumerable.Empty<MusicInfo>();
         }
 
-        public async Task<Djradio?> GetDJProgramAsync(int radioId, int limit = 50,
-            int offset = 0, bool asc = false)
+        public async Task GetDjDetailAsync(long radioId)
         {
-
-            Console.WriteLine(await (await RequestAsync(
-                "https://music.163.com/weapi/dj/program/byradio",
+            var res = (await RequestAsync(
+                "https://music.163.com/api/djradio/v2/get",
                 HttpMethod.Post, new
                 {
-                    radioId = radioId,
-                    limit = limit,
-                    offset = offset,
-                    asc = asc
+                    id = radioId,
                 }, new NeteaseRequestOption
                 {
                     Crypto = CryptoType.Weapi
-                })).Content.ReadAsStringAsync());
-            ;
-            
+                }));
+            Console.WriteLine(await res.Content.ReadAsStringAsync());
+
+        }
+        public async Task<Djradio?> GetDjProgramAsync(int radioId, int limit = 50,
+            int offset = 0, bool asc = false)
+        {
+
+            // Console.WriteLine(await (await RequestAsync(
+            //     "https://music.163.com/weapi/dj/program/byradio",
+            //     HttpMethod.Post, new
+            //     {
+            //         radioId = radioId,
+            //         limit = limit,
+            //         offset = offset,
+            //         asc = asc
+            //     }, new NeteaseRequestOption
+            //     {
+            //         Crypto = CryptoType.Weapi
+            //     })).Content.ReadAsStringAsync());
+            // ;
+            //
             return await (await RequestAsync("https://music.163.com/weapi/dj/program/byradio",
                 HttpMethod.Post, new
                 {
@@ -86,6 +100,24 @@ namespace NeteaseCloudMusic.NET
                 PropertyNameCaseInsensitive = true
             });
             // return 0;
+        }
+
+        public async Task<List<Djradio>> GetDjProgramToplistAsync(int limit = 50,
+            int offset = 0)
+        {
+            var aa = (
+                await (await RequestAsync(
+                        "https://music.163.com/api/program/toplist/v1",
+                        HttpMethod.Post, new
+                        {
+                            limit = limit,
+                            offset = offset,
+                        }, new NeteaseRequestOption
+                        {
+                            Crypto = CryptoType.Weapi
+                        })).Content
+                    .ReadFromJsonAsync<List<Djradio>>());
+            return aa;
         }
     }
 }

@@ -2,9 +2,11 @@ using System.Dynamic;
 using System.IO.Compression;
 using System.Net;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using System.Text.Unicode;
 using NeteaseCloudMusic.NET.Models;
 using NeteaseCloudMusic.NET.Utils;
 using static System.Text.Json.JsonSerializer;
@@ -94,6 +96,11 @@ public partial class NeteasyCloudClient
         NeteaseRequestOption neteaseRequestOption)
     {
         JsonNode? jData = SerializeToNode(data);
+        //     , new JsonSerializerOptions
+        // {
+        //     Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+        // }
+        Console.WriteLine(jData.ToJsonString());
         // 设置UA
         HttpRequestMessage httpRequestMessage =
             new HttpRequestMessage
@@ -187,12 +194,18 @@ public partial class NeteasyCloudClient
                 }
 
                 // 加密后的数据
+                // var jj = "{\"c\":\"[{\\\"id\\\":5221167}]\"}";
+                Console.WriteLine(jData.ToJsonString().Replace("\u0022", "\\\""));
+                // var eData =
+                //     // Encrypt.EncryptedRequestWeapi(
+                //     Crypto.WEApi(
+                //         data);
+                        // jData.ToJsonString());
+                // 需要提取csrf
                 var eData =
                     Encrypt.EncryptedRequestWeapi(
                         jData.ToJsonString());
-                // 需要提取csrf
-
-
+                // Console.WriteLine(eData.);
                 httpRequestMessage.Content =
                     new FormUrlEncodedContent(eData);
                 break;

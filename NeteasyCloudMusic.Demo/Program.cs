@@ -6,8 +6,12 @@ using System.Threading.Channels;
 using NeteaseCloudMusic.NET;
 
 NeteasyCloudClient neteasyCloudClient = new();
-
-var a = await neteasyCloudClient.GetDJProgramAsync(973537451, offset:0, limit:30);
+// await neteasyCloudClient.GetDjProgramToplistAsync(50, 0);
+Console.WriteLine((await neteasyCloudClient.GetDjProgramAsync(973537451)).Count);
+await neteasyCloudClient.GetDjDetailAsync(973537451);
+// await neteasyCloudClient.GetDjDetailAsync(5221167);
+return;
+var a = await neteasyCloudClient.GetDjProgramAsync(973537451, offset:0, limit:30);
 // var a = await neteasyCloudClient.GetDjradioListAsync(973537451);
 foreach (var aProgram in a.Programs)
 {

@@ -33,6 +33,8 @@ public partial class NeteasyCloudClient
             _neteaseClient.DefaultRequestHeaders.Add(
                 data[0].Trim(), data[1].Trim());
         }
+
+        Config = JsonDocument.Parse(Configjson).RootElement;
     }
 
     /// <summary>

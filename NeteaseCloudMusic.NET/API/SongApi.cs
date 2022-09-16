@@ -72,7 +72,7 @@ public partial class NeteasyCloudClient
                     c = JsonSerializer.Serialize( ids.Select(s => new {id = s}))
                 }));
         var a = 
-            await RequestAsync("https://music.163.com/api/v3/song/detail", 
+            await RequestAsync("https://music.163.com/weapi/v3/song/detail", 
                 HttpMethod.Post, 
                 new
                 {

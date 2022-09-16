@@ -1,6 +1,7 @@
 using System.Dynamic;
 using System.IO.Compression;
 using System.Net;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -9,6 +10,8 @@ using System.Text.RegularExpressions;
 using System.Text.Unicode;
 using NeteaseCloudMusic.NET.Models;
 using NeteaseCloudMusic.NET.Utils;
+// using Newtonsoft.Json.Linq;
+using System.Text.Json;
 using static System.Text.Json.JsonSerializer;
 
 namespace NeteaseCloudMusic.NET;
@@ -16,9 +19,9 @@ namespace NeteaseCloudMusic.NET;
 // Requests
 public partial class NeteasyCloudClient
 {
-    public const string Config =
+    public const string Configjson =
         @"{
-          ""anonymous_token"": """",
+          ""anonymous_token"": ""bf8bfeabb1aa84f9c8c3906c04a04fb864322804c83f5d607e91a04eae463c9436bd1a17ec353cf7ea06cbc8babe68895b287d087a92e0d4993166e004087dd3ea770798d7b00e03057de5881b9163abe6003607710be9bdb9600f62777cbb10807e650dd04abd3fb8130b7ae43fcc5b"",
           ""resourceTypeMap"": {
             ""0"": ""R_SO_4_"",
             ""1"": ""R_MV_5_"",
@@ -30,6 +33,7 @@ public partial class NeteasyCloudClient
           }
         }";
 
+    public readonly JsonElement Config;
 
     private static string[] _mobileUAs = new[]
     {
@@ -95,12 +99,15 @@ public partial class NeteasyCloudClient
         object data,
         NeteaseRequestOption neteaseRequestOption)
     {
+        Console.WriteLine(url);
+        //JObject a = JObject.FromObject(data);
+        //Console.WriteLine(a.ToString());
         JsonNode? jData = SerializeToNode(data);
         //     , new JsonSerializerOptions
         // {
         //     Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
         // }
-        Console.WriteLine(jData.ToJsonString());
+        // Console.WriteLine(jData.ToString());
         // 设置UA
         HttpRequestMessage httpRequestMessage =
             new HttpRequestMessage
@@ -155,7 +162,7 @@ public partial class NeteasyCloudClient
                 {
                     neteaseRequestOption.Cookie["MUSIC_A"] =
                         // Config;
-                        "";
+                        Config.GetProperty("anonymous_token").GetString();
                 }
             }
 
@@ -187,27 +194,42 @@ public partial class NeteasyCloudClient
                         // var nData =
                         //     Encrypt.EncryptedRequestWeapi(
                         //         data.ToString());
-                        jData["csrf"] = csrf;
+                        jData["csrf_token"] = csrf;
                         // 偶？ 终于增加了这个功能
 
                     }
                 }
+                //jData["csrf_token"] = "";
 
                 // 加密后的数据
                 // var jj = "{\"c\":\"[{\\\"id\\\":5221167}]\"}";
-                Console.WriteLine(jData.ToJsonString().Replace("\u0022", "\\\""));
+                //Console.WriteLine(jData.ToJsonString().Replace("\u0022", "\\\""));
                 // var eData =
                 //     // Encrypt.EncryptedRequestWeapi(
                 //     Crypto.WEApi(
                 //         data);
-                        // jData.ToJsonString());
+                // jData.ToJsonString());
                 // 需要提取csrf
+                //var ff = "{\"c\":\"[{\\\"id\\\":347230}]\",\"csrf_token\":\"\"}";
+                //Console.WriteLine(jData.ToJsonString());
+                //Console.WriteLine(ff);
                 var eData =
                     Encrypt.EncryptedRequestWeapi(
                         jData.ToJsonString());
-                // Console.WriteLine(eData.);
+                //ff);
+                //Console.WriteLine(JsonSerializer.Serialize(eData, new JsonSerializerOptions
+                //{
+                //    WriteIndented = true,
+                //    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                //}));
+                //Console.WriteLine(JsonSerializer.Serialize(eData, new JsonSerializerOptions
+                //{
+                //    WriteIndented = true,
+                //    //Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                //}));
                 httpRequestMessage.Content =
                     new FormUrlEncodedContent(eData);
+                // Console.WriteLine(await httpRequestMessage.Content.ReadAsStringAsync());
                 break;
             case CryptoType.Linuxapi:
                 break;
@@ -218,7 +240,11 @@ public partial class NeteasyCloudClient
             default:
                 break;
         }
+        //HttpClientHandler httpClientHandler = new HttpClientHandler
+        //{
 
+        //}
+        //_neteaseClient.PostAsJsonAsync();
         var aa = await _neteaseClient.SendAsync(httpRequestMessage);
         return aa;
     }

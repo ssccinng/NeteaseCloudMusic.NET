@@ -21,6 +21,11 @@ namespace NeteaseCloudMusic.NET
                 $"djradio?id={id}&_hash=programlist&limit=10000");
         }
 
+        /// <summary>
+        /// 通过html获取电台音乐信息
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<MusicInfo>>
             GetDjradioListAsync(string url)
         {
@@ -53,10 +58,15 @@ namespace NeteaseCloudMusic.NET
             return Enumerable.Empty<MusicInfo>();
         }
 
-        public async Task GetDjDetailAsync(long radioId)
+        /// <summary>
+        /// 获取电台信息V2Api
+        /// </summary>
+        /// <param name="radioId">电台id</param>
+        public async Task GetDjDetailV2Async(long radioId)
         {
             var res = (await RequestAsync(
-                "https://music.163.com/api/djradio/v2/get",
+                "https://music.163.com/weapi/djradio/v2/get",
+                //"https://music.163.com/weapi/djradio/get",
                 HttpMethod.Post, new
                 {
                     id = radioId,
@@ -65,12 +75,38 @@ namespace NeteaseCloudMusic.NET
                     Crypto = CryptoType.Weapi
                 }));
             Console.WriteLine(await res.Content.ReadAsStringAsync());
-
         }
+
+        /// <summary>
+        /// 获取电台信息V1Api
+        /// </summary>
+        /// <param name="radioId">电台id</param>
+        public async Task GetDjDetailV1Async(long radioId)
+        {
+            var res = (await RequestAsync(
+                //"https://music.163.com/api/djradio/v2/get",
+                "https://music.163.com/weapi/djradio/get",
+                HttpMethod.Post, new
+                {
+                    id = radioId,
+                }, new NeteaseRequestOption
+                {
+                    Crypto = CryptoType.Weapi
+                }));
+            Console.WriteLine(await res.Content.ReadAsStringAsync());
+        }
+
+        /// <summary>
+        /// 获取电台节目列表
+        /// </summary>
+        /// <param name="radioId">电台id</param>
+        /// <param name="limit">个数限制</param>
+        /// <param name="offset">偏移</param>
+        /// <param name="asc">排序顺序</param>
+        /// <returns></returns>
         public async Task<Djradio?> GetDjProgramAsync(int radioId, int limit = 50,
             int offset = 0, bool asc = false)
         {
-
             // Console.WriteLine(await (await RequestAsync(
             //     "https://music.163.com/weapi/dj/program/byradio",
             //     HttpMethod.Post, new
@@ -91,7 +127,7 @@ namespace NeteaseCloudMusic.NET
                     radioId = radioId,
                     limit = limit,
                     offset = offset,
-                    asc = asc 
+                    asc = asc
                 }, new NeteaseRequestOption
                 {
                     Crypto = CryptoType.Weapi
@@ -102,6 +138,12 @@ namespace NeteaseCloudMusic.NET
             // return 0;
         }
 
+        /// <summary>
+        /// 获取新晋电台榜/热门电台榜
+        /// </summary>
+        /// <param name="limit">个数限制</param>
+        /// <param name="offset">偏移</param>
+        /// <returns></returns>
         public async Task<List<Djradio>> GetDjProgramToplistAsync(int limit = 50,
             int offset = 0)
         {
@@ -118,6 +160,81 @@ namespace NeteaseCloudMusic.NET
                         })).Content
                     .ReadFromJsonAsync<List<Djradio>>());
             return aa;
+        }
+
+        /// <summary>
+        /// 获取热门电台
+        /// </summary>
+        /// <param name="limit">个数限制</param>
+        /// <param name="offset">偏移</param>
+        public async Task GetDjHotAsync(int limit = 50,
+            int offset = 0)
+        {
+            var res = await RequestAsync(
+                "https://music.163.com/weapi/djradio/hot/v1",
+                HttpMethod.Post, new
+                {
+                    limit = limit,
+                    offset = offset,
+                }, new NeteaseRequestOption
+                {
+                    Crypto = CryptoType.Weapi
+                });
+
+            Console.WriteLine(await res.Content.ReadAsStringAsync());
+        }
+
+        /// <summary>
+        /// 获取电台节目详情
+        /// </summary>
+        /// <param name="id">电台节目id</param>
+        /// <returns></returns>
+        public async Task<object> GetDjProgramDetailAsync(long id)
+        {
+            var res = await RequestAsync(
+                "https://music.163.com/weapi/dj/program/detail",
+                HttpMethod.Post, new
+                {
+                    id = id,
+                }, new NeteaseRequestOption
+                {
+                    Crypto = CryptoType.Weapi
+                });
+            return await res.Content.ReadAsStringAsync();
+        }
+
+        /// <summary>
+        /// 获取电台banner
+        /// </summary>
+        /// <returns></returns>
+        public async Task<object> GetDjBannerAsync()
+        {
+            var res = await RequestAsync(
+                "https://music.163.com/weapi/djradio/banner/get",
+                HttpMethod.Post, new
+                {
+                }, new NeteaseRequestOption
+                {
+                    Crypto = CryptoType.Weapi,
+                    Cookie = new Dictionary<string, string> { { "os", "pc" } }
+                });
+            return await res.Content.ReadAsStringAsync();
+        }
+/// <summary>
+/// 获取电台非热门类型
+/// </summary>
+/// <returns></returns>
+        public async Task<object> GetDJCategoryExcludehot()
+        {
+            var res = await RequestAsync(
+                "https://music.163.com/weapi/djradio/category/excludehot",
+                HttpMethod.Post, new
+                {
+                }, new NeteaseRequestOption
+                {
+                    Crypto = CryptoType.Weapi,
+                });
+            return await res.Content.ReadAsStringAsync();
         }
     }
 }

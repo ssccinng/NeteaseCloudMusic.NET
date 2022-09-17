@@ -7,11 +7,17 @@ using NeteaseCloudMusic.NET;
 
 NeteasyCloudClient neteasyCloudClient = new();
 // await neteasyCloudClient.GetDjProgramToplistAsync(50, 0);
+await neteasyCloudClient.RegisterAnonimous();
 Console.WriteLine((await neteasyCloudClient.GetDjProgramAsync(973537451)).Count);
 //  await neteasyCloudClient.GetDjDetailV2Async(973537451);
 // Console.WriteLine(await neteasyCloudClient.GetDjBannerAsync());
 // Console.WriteLine(await neteasyCloudClient.GetDJCategoryExcludehot());
-Console.WriteLine(await neteasyCloudClient.GetMusicCommentAsync(5221167));
+
+var aa=  await neteasyCloudClient.GetSongAsync(25873216);
+Console.WriteLine(JsonSerializer.Serialize(aa));
+
+// Console.WriteLine(await neteasyCloudClient.GetMusicCommentAsync(5221167));
+// Console.WriteLine(await neteasyCloudClient.GetMusicCommentAsync(5221167));
 // Console.WriteLine(await neteasyCloudClient.GetDjProgramDetailAsync(2511153898));
 // ;
 //

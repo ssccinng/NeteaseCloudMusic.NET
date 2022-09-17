@@ -33,7 +33,11 @@ public partial class NeteasyCloudClient
             await File.WriteAllBytesAsync($"Music/{id}.mp3", bytes);
         }
     }
-
+    public async Task<Song> GetSongAsync(long id,
+        int bitRate = 320000)
+    {
+        return await GetSongAsync(new[] { id }, bitRate);
+    }
     public async Task<Song> GetSongAsync(long[] ids,
         int bitRate = 320000)
     {
@@ -44,12 +48,14 @@ public partial class NeteasyCloudClient
                 {
                     ids = ids.Select(s => s.ToString()),
                     br = bitRate,
-                    csrf_token = ""
+                    // csrf_token = ""
                 }, 
                 new NeteaseRequestOption
                 {
                     Crypto = CryptoType.Weapi
                 });
+
+        Console.WriteLine(await a.Content.ReadAsStringAsync());
         var data = await a.Content.ReadFromJsonAsync<Song>(
             new JsonSerializerOptions
             {
@@ -58,11 +64,11 @@ public partial class NeteasyCloudClient
         return data;
     }
 
-    public async Task GetSongDetailAsync (long id)
+    public async Task<SongDetailResult> GetSongDetailAsync (long id)
     {
-        await GetSongDetailAsync(new []{id});
+        return await GetSongDetailAsync(new []{id});
     }
-    public async Task GetSongDetailAsync(params long[] ids)
+    public async Task<SongDetailResult> GetSongDetailAsync(params long[] ids)
     {
         var aa =
             $"[{string.Join(',', ids.Select(s => $"{{\"id\":{s}}}"))}]";
@@ -76,12 +82,19 @@ public partial class NeteasyCloudClient
                 HttpMethod.Post, 
                 new
                 {
-                    c = aa
+                    c = aa,
+                    Cookie = new Dictionary<string, string> { { "os", "pc" } },
+
                 }, 
                 new NeteaseRequestOption
                 {
-                    Crypto = CryptoType.Weapi
+                    Crypto = CryptoType.Weapi,
+                    
                 });
+        return await a.Content.ReadFromJsonAsync<SongDetailResult>(new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
         Console.WriteLine(await a.Content.ReadAsStringAsync());
     }
 }

@@ -44,7 +44,7 @@ public class Freetimetrialprivilege
 
 
 
-public class Rootobject
+public class SongDetailResult
 {
     public SongDetail[] Songs { get; set; }
     public Privilege[] Privileges { get; set; }

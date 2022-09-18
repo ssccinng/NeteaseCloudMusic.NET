@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Channels;
@@ -12,9 +13,9 @@ Console.WriteLine((await neteasyCloudClient.GetDjProgramAsync(973537451)).Count)
 //  await neteasyCloudClient.GetDjDetailV2Async(973537451);
 // Console.WriteLine(await neteasyCloudClient.GetDjBannerAsync());
 // Console.WriteLine(await neteasyCloudClient.GetDJCategoryExcludehot());
-
-var aa=  await neteasyCloudClient.GetSongAsync(25873216);
-Console.WriteLine(JsonSerializer.Serialize(aa));
+await neteasyCloudClient.DownloadSongAsync(1309814574);
+//var aa=  await neteasyCloudClient.GetSongAsync(25873216);
+//Console.WriteLine(JsonSerializer.Serialize(aa));
 
 // Console.WriteLine(await neteasyCloudClient.GetMusicCommentAsync(5221167));
 // Console.WriteLine(await neteasyCloudClient.GetMusicCommentAsync(5221167));

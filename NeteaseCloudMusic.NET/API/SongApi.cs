@@ -18,19 +18,24 @@ public partial class NeteasyCloudClient
         var data = await GetSongAsync(id, bitRate);
         return data.Data.Select(S => S.Url).ToArray();
     }
-
-    public async Task DownloadSongAsync(long[] id,
+    public async Task DownloadSongAsync( long id,
+       int bitRate = 320000)
+    {
+        await DownloadSongAsync(new[] {id}, bitRate);
+    }
+    public async Task DownloadSongAsync(long[] ids,
         int bitRate = 320000)
     {
         if (!Directory.Exists("Music"))
         {
             Directory.CreateDirectory("Music");
         }
-        var urls = await GetSongUrlAsync(id, bitRate);
+        var urls = await GetSongUrlAsync(ids, bitRate);
+        int idx = 0;
         foreach (var url in urls)
         {
             var bytes = await _normalClient.GetByteArrayAsync(url);
-            await File.WriteAllBytesAsync($"Music/{id}.mp3", bytes);
+            await File.WriteAllBytesAsync($"Music/{ids[idx++]}.mp3", bytes);
         }
     }
     public async Task<Song> GetSongAsync(long id,

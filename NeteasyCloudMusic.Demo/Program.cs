@@ -7,9 +7,15 @@ using System.Threading.Channels;
 using NeteaseCloudMusic.NET;
 
 NeteasyCloudClient neteasyCloudClient = new();
+
+
+
 // await neteasyCloudClient.GetDjProgramToplistAsync(50, 0);
 await neteasyCloudClient.RegisterAnonimous();
-Console.WriteLine((await neteasyCloudClient.GetDjProgramAsync(973537451)).Count);
+var res = await neteasyCloudClient.SearchMusicAsync("a step away");
+
+Console.WriteLine((await neteasyCloudClient.GetDjradioListAsync(973537451)));
+//Console.WriteLine((await neteasyCloudClient.GetDjProgramAsync(973537451)).Count);
 //  await neteasyCloudClient.GetDjDetailV2Async(973537451);
 // Console.WriteLine(await neteasyCloudClient.GetDjBannerAsync());
 // Console.WriteLine(await neteasyCloudClient.GetDJCategoryExcludehot());
